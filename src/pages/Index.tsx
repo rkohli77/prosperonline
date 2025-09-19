@@ -10,7 +10,8 @@ import Footer from '@/components/Footer';
   _hsq.push(['setPath', '/home']);
 </script>
 
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/{hubId}.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js-na3.hs-scripts.com/342412552.js"></script>
+
 </div>
 const Index = () => {
   return (
