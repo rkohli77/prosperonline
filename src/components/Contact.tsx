@@ -11,7 +11,8 @@ const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     company: '',
@@ -26,10 +27,20 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.message) {
+    // Remove non-digit characters for validation
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message || !formData.service) {
       toast({
         title: "Error",
         description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (formData.phone && phoneDigits.length !== 10) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid 10-digit phone number.",
         variant: "destructive",
       });
       return;
@@ -41,12 +52,13 @@ const Contact = () => {
     setTimeout(() => {
       toast({
         title: "Success!",
-        description: `Thank you, ${formData.name}! We'll contact you at ${formData.email} within 24 hours.`,
+        description: `Thank you, ${formData.firstName}! We'll contact you at ${formData.email} within 24 hours.`,
         className: "bg-success text-success-foreground",
       });
       
       setFormData({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         phone: '',
         company: '',
@@ -119,28 +131,37 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name *</Label>
+                    <Label htmlFor="firstName">First Name *</Label>
                     <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
                       className="focus-ring"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
+                    <Label htmlFor="lastName">Last Name *</Label>
                     <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
                       className="focus-ring"
                       required
                     />
                   </div>
                 </div>
-
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="focus-ring"
+                    required
+                  />
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
@@ -150,6 +171,9 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
                       className="focus-ring"
+                      pattern="[0-9\s\-()]{10,}" // allow user to type any format, but validate in JS
+                      title="Please enter a valid 10-digit phone number."
+                      maxLength={20}
                     />
                   </div>
                   <div className="space-y-2">
@@ -164,8 +188,8 @@ const Contact = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="service">Service Interested In</Label>
-                  <Select value={formData.service} onValueChange={(value) => handleInputChange('service', value)}>
+                  <Label htmlFor="service">Service Interested In *</Label>
+                  <Select value={formData.service} onValueChange={(value) => handleInputChange('service', value)} required>
                     <SelectTrigger className="focus-ring">
                       <SelectValue placeholder="Select a service" />
                     </SelectTrigger>

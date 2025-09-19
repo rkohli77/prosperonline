@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import logo from '@/assets/logo.png';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,12 +32,14 @@ const Header = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">P</span>
-            </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              ProsperOnline.ca
-            </span>
+            <button
+              onClick={() => scrollToSection('home')}
+              className="focus:outline-none focus-visible:ring-2 ring-accent rounded transition hover:opacity-80"
+              aria-label="Go to top of home page"
+              style={{ background: 'none', border: 'none', padding: 0 }}
+            >
+              <img src={logo} alt="ProsperOnline.ca Logo" className="w-64 h-65 object-contain" />
+            </button>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">

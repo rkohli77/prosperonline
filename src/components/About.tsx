@@ -24,32 +24,6 @@ const About = () => {
               presence and achieve sustainable growth.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <div className="text-center group animate-scale-in" style={{ animationDelay: '0.4s' }}>
-              <div className="w-16 h-16 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow transition-smooth">
-                <span className="text-white text-2xl font-bold">5+</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Years Experience</h3>
-              <p className="text-muted-foreground">Helping businesses grow online</p>
-            </div>
-
-            <div className="text-center group animate-scale-in" style={{ animationDelay: '0.5s' }}>
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow transition-smooth">
-                <span className="text-white text-2xl font-bold">100+</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Happy Clients</h3>
-              <p className="text-muted-foreground">Across Canada and beyond</p>
-            </div>
-
-            <div className="text-center group animate-scale-in" style={{ animationDelay: '0.6s' }}>
-              <div className="w-16 h-16 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow transition-smooth">
-                <span className="text-white text-2xl font-bold">24/7</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Support</h3>
-              <p className="text-muted-foreground">Always here when you need us</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
