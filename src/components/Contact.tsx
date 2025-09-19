@@ -7,12 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
-<script>
-  var _hsq = window._hsq = window._hsq || [];
-  _hsq.push(['setPath', '/about-us']);
-  _hsq.push(['trackPageView']);
-</script>
-
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);

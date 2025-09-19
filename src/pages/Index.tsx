@@ -4,15 +4,7 @@ import Services from '@/components/Services';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
-<div> 
-<script>
-  var _hsq = window._hsq = window._hsq || [];
-  _hsq.push(['setPath', '/home']);
-</script>
 
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na3.hs-scripts.com/342412552.js"></script>
-
-</div>
 const Index = () => {
   return (
     <div className="min-h-screen">

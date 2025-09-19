@@ -26,5 +26,22 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Set up the path for the initial page view -->
+<script>
+  var _hsq = window._hsq = window._hsq || [];
+  _hsq.push(['setPath', '/']);
+</script>
+
+<!-- Load the HubSpot tracking code -->
+<!-- Start of HubSpot Embed Code -->
+  <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/342412552.js"></script>
+<!-- End of HubSpot Embed Code -->
+
+<!-- Tracking subsequent page views -->
+<script>
+  var _hsq = window._hsq = window._hsq || [];
+  _hsq.push(['setPath', '/contact']);
+  _hsq.push(['trackPageView']);
+</script>
   </body>
 </html>
