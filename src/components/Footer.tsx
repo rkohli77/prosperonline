@@ -1,3 +1,4 @@
+import logo from '@/assets/logo.png';
 const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
@@ -6,10 +7,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">P</span>
-              </div>
-              <span className="text-xl font-bold">ProsperOnline.ca</span>
+            <img src={logo} alt="ProsperOnline.ca Logo" className="w-60 h-65 object-contain brightness-0 invert" />
             </div>
             <p className="text-primary-foreground/80 mb-4 max-w-md">
               Helping Canadian businesses grow online with comprehensive digital marketing solutions, 
