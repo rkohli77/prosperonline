@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
+import { handleGetStarted } from '@/lib/navigation';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,15 +31,6 @@ const Header = () => {
     }
   };
 
-  const handleGetStarted = () => {
-    // If we're on the home page, just scroll to contact
-    if (window.location.pathname === '/') {
-      scrollToSection('contact');
-    } else {
-      // If we're on another page, navigate to home and then scroll to contact
-      window.location.href = '/#contact';
-    }
-  };
 
   return (
     <header

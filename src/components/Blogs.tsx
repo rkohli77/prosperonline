@@ -101,9 +101,9 @@ const Blogs = () => {
                     <span className="mx-2">•</span>
                     <span>{blogPosts[0].readTime}</span>
                   </div>
-                  <Button className="bg-gradient-accent hover:shadow-glow transition-smooth">
+                  {/* <Button className="bg-gradient-accent hover:shadow-glow transition-smooth">
                     Read More
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
               <div className="bg-gradient-primary/10 p-8 lg:p-12 flex items-center justify-center">
@@ -144,9 +144,9 @@ const Blogs = () => {
                     <span className="mx-1">•</span>
                     <span>{post.readTime}</span>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs">
+                  {/* <Button variant="outline" size="sm" className="text-xs">
                     Read More
-                  </Button>
+                  </Button> */}
                 </div>
               </CardContent>
             </Card>
