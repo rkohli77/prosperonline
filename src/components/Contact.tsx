@@ -10,37 +10,48 @@ import { useToast } from '@/hooks/use-toast';
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     company: '',
-    service: '',
+    industry: '',
     message: '',
   });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Clear previous errors
+    setErrors({});
+    
     // Remove non-digit characters for validation
     const phoneDigits = formData.phone.replace(/\D/g, '');
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message || !formData.service) {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.firstName) newErrors.firstName = 'First name is required';
+    if (!formData.lastName) newErrors.lastName = 'Last name is required';
+    if (!formData.email) newErrors.email = 'Email address is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
+    if (!formData.message) newErrors.message = 'Message is required';
+    if (!formData.industry) newErrors.industry = 'Please select a service';
+    if (formData.phone && phoneDigits.length !== 10) newErrors.phone = 'Please enter a valid 10-digit phone number';
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       toast({
         title: "Error",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (formData.phone && phoneDigits.length !== 10) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid 10-digit phone number.",
+        description: "Please fix the errors below and try again.",
         variant: "destructive",
       });
       return;
@@ -62,10 +73,10 @@ const Contact = () => {
         email: '',
         phone: '',
         company: '',
-        service: '',
+        industry: '',
         message: '',
       });
-      
+      setErrors({});
       setIsSubmitting(false);
     }, 1000);
   };
@@ -128,72 +139,129 @@ const Contact = () => {
               <CardTitle className="text-2xl text-center">Send us a message</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-6" role="form" aria-label="Contact form">
+                {/* Error summary for screen readers */}
+                {Object.keys(errors).length > 0 && (
+                  <div role="alert" aria-live="polite" className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+                    <h3 className="text-sm font-medium text-red-800 mb-2">Please fix the following errors:</h3>
+                    <ul className="text-sm text-red-700 list-disc list-inside">
+                      {Object.entries(errors).map(([field, error]) => (
+                        <li key={field}>
+                          <a href={`#${field}`} className="underline hover:no-underline">
+                            {error}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <legend className="sr-only">Personal Information</legend>
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input
                       id="firstName"
+                      name="firstName"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      className="focus-ring"
+                      className={`focus-ring ${errors.firstName ? 'border-red-500' : ''}`}
                       required
+                      aria-invalid={!!errors.firstName}
+                      aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                     />
+                    {errors.firstName && (
+                      <p id="firstName-error" className="text-sm text-red-600" role="alert">
+                        {errors.firstName}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name *</Label>
                     <Input
                       id="lastName"
+                      name="lastName"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      className="focus-ring"
+                      className={`focus-ring ${errors.lastName ? 'border-red-500' : ''}`}
                       required
+                      aria-invalid={!!errors.lastName}
+                      aria-describedby={errors.lastName ? 'lastName-error' : undefined}
                     />
+                    {errors.lastName && (
+                      <p id="lastName-error" className="text-sm text-red-600" role="alert">
+                        {errors.lastName}
+                      </p>
+                    )}
                   </div>
-                </div>
+                </fieldset>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address *</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="focus-ring"
+                    className={`focus-ring ${errors.email ? 'border-red-500' : ''}`}
                     required
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
                   />
+                  {errors.email && (
+                    <p id="email-error" className="text-sm text-red-600" role="alert">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <legend className="sr-only">Contact Details</legend>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
+                      name="phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="focus-ring"
+                      className={`focus-ring ${errors.phone ? 'border-red-500' : ''}`}
                       pattern="[0-9\s\-()]{10,}" // allow user to type any format, but validate in JS
                       title="Please enter a valid 10-digit phone number."
                       maxLength={20}
+                      aria-invalid={!!errors.phone}
+                      aria-describedby={errors.phone ? 'phone-error' : undefined}
                     />
+                    {errors.phone && (
+                      <p id="phone-error" className="text-sm text-red-600" role="alert">
+                        {errors.phone}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="company">Company Name</Label>
                     <Input
                       id="company"
+                      name="company"
                       value={formData.company}
                       onChange={(e) => handleInputChange('company', e.target.value)}
                       className="focus-ring"
                     />
                   </div>
-                </div>
+                </fieldset>
 
-                <div className="space-y-2">
-                  <Label htmlFor="service">Service Interested In *</Label>
-                  <Select value={formData.service} onValueChange={(value) => handleInputChange('service', value)} required>
-                    <SelectTrigger className="focus-ring">
+                <fieldset className="space-y-2">
+                  <legend className="text-sm font-medium text-gray-700 mb-2">Service Selection</legend>
+                  <Label htmlFor="industry">Service Interested In *</Label>
+                  <Select name="industry" value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)} required>
+                    <SelectTrigger 
+                      // id="service" 
+                      // name="industry" 
+                      className={`focus-ring ${errors.industry ? 'border-red-500' : ''}`}
+                      aria-invalid={!!errors.industry}
+                      aria-describedby={errors.industry ? 'service-error' : undefined}
+                    >
                       <SelectValue placeholder="Select a service" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent >
                       <SelectItem value="digital-marketing">Digital Marketing</SelectItem>
                       <SelectItem value="seo">SEO Optimization</SelectItem>
                       <SelectItem value="lead-generation">Lead Generation</SelectItem>
@@ -203,27 +271,56 @@ const Contact = () => {
                       <SelectItem value="multiple">Multiple Services</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                  {errors.industry && (
+                    <p id="service-error" className="text-sm text-red-600" role="alert">
+                      {errors.industry}
+                    </p>
+                  )}
+                </fieldset>
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Message *</Label>
                   <Textarea
                     id="message"
+                    name="message"
                     value={formData.message}
                     onChange={(e) => handleInputChange('message', e.target.value)}
                     placeholder="Tell us about your project and goals..."
-                    className="focus-ring min-h-[120px]"
+                    className={`focus-ring min-h-[120px] ${errors.message ? 'border-red-500' : ''}`}
                     required
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? 'message-error' : undefined}
                   />
+                  {errors.message && (
+                    <p id="message-error" className="text-sm text-red-600" role="alert">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-gradient-accent hover:shadow-glow transition-smooth hover-lift text-lg py-3"
+                  aria-describedby="submit-description"
+                  aria-label={isSubmitting ? 'Sending your message, please wait' : 'Send your contact message'}
+                  aria-live="polite"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? (
+                    <>
+                      <span className="sr-only">Sending your message, please wait</span>
+                      <span aria-hidden="true">Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="sr-only">Send your contact message to Prosper Online</span>
+                      <span aria-hidden="true">Send Message</span>
+                    </>
+                  )}
                 </Button>
+                <p id="submit-description" className="text-sm text-gray-600 text-center">
+                  By submitting this form, you agree to be contacted by Prosper Online regarding your inquiry.
+                </p>
               </form>
             </CardContent>
           </Card>
