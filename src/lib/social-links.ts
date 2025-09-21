@@ -23,20 +23,7 @@ const isAndroid = (): boolean => {
 export const getFacebookUrl = (): string => {
   const baseUrl = 'https://www.facebook.com/GoProsperOnline/';
   
-  if (!isMobile()) {
-    return baseUrl;
-  }
-  
-  if (isIOS()) {
-    // Try multiple Facebook URL schemes for iOS
-    return 'fb://page/GoProsperOnline';
-  }
-  
-  if (isAndroid()) {
-    // Try to open Facebook app, fallback to web
-    return 'intent://www.facebook.com/GoProsperOnline/#Intent;package=com.facebook.katana;scheme=https;end';
-  }
-  
+  // Always return web URL, let the click handler manage app opening
   return baseUrl;
 };
 
@@ -70,35 +57,52 @@ export const handleSocialClick = (url: string, fallbackUrl: string) => {
   return (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     
-    // For Facebook on iOS, try multiple URL schemes
-    if (isIOS() && url.includes('fb://')) {
-      const facebookSchemes = [
-        'fb://page/GoProsperOnline',
-        'fb://profile/GoProsperOnline'
-      ];
+    // For Facebook on mobile, try to open in app first
+    if (isMobile() && url.includes('facebook.com')) {
+      if (isIOS()) {
+        // Try Facebook app schemes for iOS
+        const facebookSchemes = [
+          'fb://profile/GoProsperOnline',
+          'fb://page/GoProsperOnline',
+          'fb://profile?id=GoProsperOnline'
+        ];
+        
+        let schemeIndex = 0;
+        const tryNextScheme = () => {
+          if (schemeIndex < facebookSchemes.length) {
+            const appWindow = window.open(facebookSchemes[schemeIndex], '_blank');
+            schemeIndex++;
+            
+            setTimeout(() => {
+              if (!appWindow || appWindow.closed) {
+                tryNextScheme();
+              }
+            }, 800);
+          } else {
+            // All schemes failed, fallback to web
+            window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+          }
+        };
+        
+        tryNextScheme();
+        return;
+      }
       
-      let schemeIndex = 0;
-      const tryNextScheme = () => {
-        if (schemeIndex < facebookSchemes.length) {
-          const appWindow = window.open(facebookSchemes[schemeIndex], '_blank');
-          schemeIndex++;
-          
-          setTimeout(() => {
-            if (!appWindow || appWindow.closed) {
-              tryNextScheme();
-            }
-          }, 500);
-        } else {
-          // All schemes failed, fallback to web
-          window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
-        }
-      };
-      
-      tryNextScheme();
-      return;
+      if (isAndroid()) {
+        // Try Android intent for Facebook
+        const intentUrl = 'intent://www.facebook.com/GoProsperOnline/#Intent;package=com.facebook.katana;scheme=https;end';
+        const appWindow = window.open(intentUrl, '_blank');
+        
+        setTimeout(() => {
+          if (!appWindow || appWindow.closed) {
+            window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+          }
+        }, 1000);
+        return;
+      }
     }
     
-    // For other cases, use the original logic
+    // For Instagram or other cases, use the original logic
     const appWindow = window.open(url, '_blank');
     
     // If the app doesn't open (window is null or closed immediately), fallback to web
