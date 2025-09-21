@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import heroBackground from '@/assets/hero-background.jpg';
+import heroBackground from '@/assets/hero-background.webp';
 
 const Hero = () => {
   const scrollToContact = () => {
@@ -40,7 +40,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 animate-fade-in-up max-w-3xl mx-auto" style={{ animationDelay: '0.2s' }}>
-            We help businesses grow online with marketing, SEO, lead generation, and analytics solutions designed for the Canadian market.
+            We help businesses grow online with marketing, SEO, custom website, lead generation, and analytics solutions designed for the Canadian market.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>

@@ -1,4 +1,5 @@
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.webp';
+import { getFacebookUrl, getInstagramUrl, handleSocialClick } from '@/lib/social-links';
 const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
@@ -17,11 +18,25 @@ const Footer = () => {
               <a href="#" className="text-primary-foreground/60 hover:text-accent transition-smooth">
                 LinkedIn
               </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-smooth">
+              <a 
+                href={getFacebookUrl()} 
+                onClick={handleSocialClick(getFacebookUrl(), 'https://www.facebook.com/GoProsperOnline/')}
+                className="text-primary-foreground/60 hover:text-accent transition-smooth" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Visit our Facebook page"
+              >
                 Facebook
               </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-smooth">
-                Twitter
+              <a 
+                href={getInstagramUrl()} 
+                onClick={handleSocialClick(getInstagramUrl(), 'https://www.instagram.com/GoProsperOnline/')}
+                className="text-primary-foreground/60 hover:text-accent transition-smooth" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Visit our Instagram page"
+              >
+                Instagram
               </a>
             </div>
           </div>

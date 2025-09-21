@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.webp';
 import { handleGetStarted } from '@/lib/navigation';
 
 const Header = () => {
