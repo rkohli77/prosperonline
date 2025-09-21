@@ -253,8 +253,7 @@ const Contact = () => {
                   <Label htmlFor="industry">Service Interested In *</Label>
                   <Select name="industry" value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)} required>
                     <SelectTrigger 
-                      // id="service" 
-                      // name="industry" 
+                      id="industry" 
                       className={`focus-ring ${errors.industry ? 'border-red-500' : ''}`}
                       aria-invalid={!!errors.industry}
                       aria-describedby={errors.industry ? 'service-error' : undefined}
