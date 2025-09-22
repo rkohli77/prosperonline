@@ -82,7 +82,15 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-gradient-primary relative overflow-hidden">
+    <>
+      {/* Skip link for keyboard navigation */}
+      <a 
+        href="#contact" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-accent"
+      >
+        Skip to contact form
+      </a>
+      <section id="contact" className="py-24 bg-gradient-primary relative overflow-hidden" aria-labelledby="contact-heading">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 right-0 w-96 h-96 bg-accent rounded-full -translate-y-1/2 translate-x-1/2" />
@@ -93,7 +101,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Contact Info */}
           <div className="text-white animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 id="contact-heading" className="text-4xl md:text-5xl font-bold mb-6">
               Get Started Today
             </h2>
             <p className="text-xl mb-8 text-primary-foreground/90">
@@ -102,17 +110,21 @@ const Contact = () => {
 
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm" aria-hidden="true">
                   <span className="text-xl">📧</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Email</h3>
-                  <p className="text-primary-foreground/80">info@prosperonline.ca</p>
+                  <p className="text-primary-foreground/80">
+                    <a href="mailto:info@prosperonline.ca" className="hover:text-accent transition-smooth">
+                      info@prosperonline.ca
+                    </a>
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm" aria-hidden="true">
                   <span className="text-xl">🇨🇦</span>
                 </div>
                 <div>
@@ -122,7 +134,7 @@ const Contact = () => {
               </div>
 
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm" aria-hidden="true">
                   <span className="text-xl">⚡</span>
                 </div>
                 <div>
@@ -136,18 +148,23 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="bg-white/95 backdrop-blur-md shadow-custom-lg animate-scale-in">
             <CardHeader>
-              <CardTitle className="text-2xl text-center">Send us a message</CardTitle>
+              <CardTitle className="text-2xl text-center" id="form-title">Send us a message</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6" role="form" aria-label="Contact form">
+              <form onSubmit={handleSubmit} className="space-y-6" role="form" aria-labelledby="form-title" aria-describedby="form-description">
+                {/* Form description for screen readers */}
+                <p id="form-description" className="sr-only">
+                  Fill out this form to contact Prosper Online. All fields marked with an asterisk (*) are required.
+                </p>
+                
                 {/* Error summary for screen readers */}
                 {Object.keys(errors).length > 0 && (
-                  <div role="alert" aria-live="polite" className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+                  <div role="alert" aria-live="assertive" className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
                     <h3 className="text-sm font-medium text-red-800 mb-2">Please fix the following errors:</h3>
                     <ul className="text-sm text-red-700 list-disc list-inside">
                       {Object.entries(errors).map(([field, error]) => (
                         <li key={field}>
-                          <a href={`#${field}`} className="underline hover:no-underline">
+                          <a href={`#${field}`} className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded">
                             {error}
                           </a>
                         </li>
@@ -155,8 +172,9 @@ const Contact = () => {
                     </ul>
                   </div>
                 )}
-                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4" aria-describedby="personal-info-desc">
                   <legend className="sr-only">Personal Information</legend>
+                  <p id="personal-info-desc" className="sr-only">Enter your first and last name</p>
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input
@@ -166,6 +184,7 @@ const Contact = () => {
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
                       className={`focus-ring ${errors.firstName ? 'border-red-500' : ''}`}
                       required
+                      autoComplete="given-name"
                       aria-invalid={!!errors.firstName}
                       aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                     />
@@ -184,6 +203,7 @@ const Contact = () => {
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
                       className={`focus-ring ${errors.lastName ? 'border-red-500' : ''}`}
                       required
+                      autoComplete="family-name"
                       aria-invalid={!!errors.lastName}
                       aria-describedby={errors.lastName ? 'lastName-error' : undefined}
                     />
@@ -196,6 +216,7 @@ const Contact = () => {
                 </fieldset>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address *</Label>
+                  <p className="sr-only" id="email-help">Enter a valid email address where we can contact you</p>
                   <Input
                     id="email"
                     name="email"
@@ -204,8 +225,9 @@ const Contact = () => {
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     className={`focus-ring ${errors.email ? 'border-red-500' : ''}`}
                     required
+                    autoComplete="email"
                     aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? 'email-error' : undefined}
+                    aria-describedby={errors.email ? 'email-error email-help' : 'email-help'}
                   />
                   {errors.email && (
                     <p id="email-error" className="text-sm text-red-600" role="alert">
@@ -213,8 +235,9 @@ const Contact = () => {
                     </p>
                   )}
                 </div>
-                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4" aria-describedby="contact-details-desc">
                   <legend className="sr-only">Contact Details</legend>
+                  <p id="contact-details-desc" className="sr-only">Enter your phone number and company name (optional)</p>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
@@ -227,6 +250,7 @@ const Contact = () => {
                       pattern="[0-9\s\-()]{10,}" // allow user to type any format, but validate in JS
                       title="Please enter a valid 10-digit phone number."
                       maxLength={20}
+                      autoComplete="tel"
                       aria-invalid={!!errors.phone}
                       aria-describedby={errors.phone ? 'phone-error' : undefined}
                     />
@@ -244,12 +268,14 @@ const Contact = () => {
                       value={formData.company}
                       onChange={(e) => handleInputChange('company', e.target.value)}
                       className="focus-ring"
+                      autoComplete="organization"
                     />
                   </div>
                 </fieldset>
 
-                <fieldset className="space-y-2">
+                <fieldset className="space-y-2" aria-describedby="service-selection-desc">
                   <legend className="text-sm font-medium text-gray-700 mb-2">Service Selection</legend>
+                  <p id="service-selection-desc" className="sr-only">Select the service you are most interested in</p>
                   <Label htmlFor="industry">Service Interested In *</Label>
                   <Select name="industry" value={formData.industry} onValueChange={(value) => handleInputChange('industry', value)} required>
                     <SelectTrigger 
@@ -279,6 +305,7 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Message *</Label>
+                  <p className="sr-only" id="message-help">Tell us about your project, goals, and how we can help you</p>
                   <Textarea
                     id="message"
                     name="message"
@@ -287,8 +314,9 @@ const Contact = () => {
                     placeholder="Tell us about your project and goals..."
                     className={`focus-ring min-h-[120px] ${errors.message ? 'border-red-500' : ''}`}
                     required
+                    autoComplete="off"
                     aria-invalid={!!errors.message}
-                    aria-describedby={errors.message ? 'message-error' : undefined}
+                    aria-describedby={errors.message ? 'message-error message-help' : 'message-help'}
                   />
                   {errors.message && (
                     <p id="message-error" className="text-sm text-red-600" role="alert">
@@ -300,7 +328,7 @@ const Contact = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-accent hover:shadow-glow transition-smooth hover-lift text-lg py-3"
+                  className="w-full bg-gradient-accent hover:shadow-glow transition-smooth hover-lift text-lg py-3 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
                   aria-describedby="submit-description"
                   aria-label={isSubmitting ? 'Sending your message, please wait' : 'Send your contact message'}
                   aria-live="polite"
@@ -326,6 +354,7 @@ const Contact = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
