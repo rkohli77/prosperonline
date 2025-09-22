@@ -1,4 +1,5 @@
 import logo from '@/assets/logo.webp';
+import Chatbot from "@/components/Chatbot";
 import { getFacebookUrl, getInstagramUrl, handleSocialClick } from '@/lib/social-links';
 const Footer = () => {
   return (
@@ -98,6 +99,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
+            <Chatbot />
     </footer>
   );
 };
