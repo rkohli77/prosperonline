@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
+import { trackChatbotError, trackUserMessage, trackApiCall, trackUserInteraction, trackConversation, trackSession } from "@/lib/error-tracking";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ sender: "user" | "bot"; text: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
 
-  // Initialize with welcome message
+  // Initialize with welcome message and track session
   useEffect(() => {
     if (messages.length === 0) {
       setMessages([
@@ -16,8 +17,26 @@ const Chatbot = () => {
           text: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?"
         }
       ]);
+
+      // Track session start
+      trackSession({
+        sessionId,
+        startedAt: new Date().toISOString(),
+        totalMessages: 0,
+        userAgent: navigator.userAgent,
+        status: 'active'
+      });
+
+      // Track initial bot message
+      trackConversation({
+        sessionId,
+        botResponse: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?",
+        messageType: 'bot',
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      });
     }
-  }, [messages.length]);
+  }, [messages.length, sessionId]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -27,7 +46,21 @@ const Chatbot = () => {
     setMessages(newMessages);
     setInput("");
     setLoading(true);
-    setError(null);
+
+    // Track user message
+    trackUserMessage();
+    trackUserInteraction('message_sent', { messageLength: messageToSend.length });
+
+    // Track user conversation
+    trackConversation({
+      sessionId,
+      userMessage: messageToSend,
+      messageType: 'user',
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent
+    });
+
+    const startTime = Date.now();
 
     try {
       // Check if API key is available
@@ -67,6 +100,8 @@ const Chatbot = () => {
         }),
       });
 
+      const responseTime = Date.now() - startTime;
+
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error?.message || `HTTP error! status: ${res.status}`);
@@ -79,19 +114,86 @@ const Chatbot = () => {
         throw new Error("No response from OpenAI");
       }
 
+      // Track successful API call
+      trackApiCall(true, responseTime);
+      trackUserInteraction('api_success', { responseTime, responseLength: reply.length });
+
+      // Track bot response
+      trackConversation({
+        sessionId,
+        botResponse: reply,
+        messageType: 'bot',
+        timestamp: new Date().toISOString(),
+        responseTime,
+        userAgent: navigator.userAgent
+      });
+
       setMessages([
         ...newMessages,
         { sender: "bot" as const, text: reply },
       ]);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-      setError(errorMessage);
+      const responseTime = Date.now() - startTime;
+      
+      // Track failed API call
+      trackApiCall(false, responseTime);
+      
+      // Track the error for backend monitoring
+      if (err instanceof Error) {
+        await trackChatbotError(err, 'chatbot_api_call', {
+          userInput: messageToSend,
+          responseTime,
+          conversationLength: messages.length,
+        });
+      }
+      
+      // Don't show technical error details to users
+      
+      // Determine user-friendly message based on error type
+      let userMessage = "I'm sorry, I'm having trouble connecting right now. Please try again later or contact us directly at info@prosperonline.ca";
+      let errorType = 'unknown';
+      
+      if (err instanceof Error) {
+        if (err.message.includes("API key")) {
+          userMessage = "I'm currently being set up. Please contact us directly at info@prosperonline.ca for immediate assistance.";
+          errorType = 'api_key_missing';
+        } else if (err.message.includes("fetch")) {
+          userMessage = "I'm having trouble connecting to our servers. Please check your internet connection and try again.";
+          errorType = 'network_error';
+        } else if (err.message.includes("HTTP error")) {
+          userMessage = "I'm experiencing some technical difficulties. Please try again in a moment or contact us at info@prosperonline.ca";
+          errorType = 'http_error';
+        } else if (err.message.includes("No response")) {
+          userMessage = "I didn't receive a proper response. Please try rephrasing your question or contact us directly.";
+          errorType = 'no_response';
+        }
+      }
+      
+      // Track user interaction with error
+      trackUserInteraction('error_encountered', { 
+        errorType, 
+        userMessage, 
+        responseTime,
+        userInput: messageToSend 
+      });
+
+      // Track error response
+      trackConversation({
+        sessionId,
+        botResponse: userMessage,
+        messageType: 'bot',
+        timestamp: new Date().toISOString(),
+        responseTime,
+        errorOccurred: true,
+        errorType,
+        userAgent: navigator.userAgent
+      });
       
       setMessages([
         ...newMessages,
         { 
           sender: "bot" as const, 
-          text: "I'm sorry, I'm having trouble connecting right now. Please try again later or contact us directly at info@prosperonline.ca" 
+          text: userMessage
         },
       ]);
     } finally {
@@ -103,7 +205,10 @@ const Chatbot = () => {
     <div className="fixed bottom-6 right-6 z-50">
       {/* Floating Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          trackUserInteraction(isOpen ? 'chat_closed' : 'chat_opened');
+        }}
         className="w-14 h-14 rounded-full bg-accent text-white flex items-center justify-center shadow-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
         aria-label={isOpen ? "Close chat" : "Open chat"}
         aria-expanded={isOpen}
@@ -123,7 +228,10 @@ const Chatbot = () => {
           <div className="bg-accent text-white p-3 rounded-t-lg font-semibold flex justify-between items-center">
             <span id="chat-title">Chat with us</span>
             <button 
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                trackUserInteraction('chat_closed');
+              }}
               className="hover:bg-white/20 rounded p-1 focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="Close chat"
             >
@@ -131,12 +239,6 @@ const Chatbot = () => {
             </button>
           </div>
 
-          {/* Error Banner */}
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-2 text-xs text-red-700">
-              <strong>Error:</strong> {error}
-            </div>
-          )}
 
           {/* Messages */}
           <div 
