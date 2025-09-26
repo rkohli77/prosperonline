@@ -6,12 +6,24 @@ import cors from "cors";
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://prosperonline.ca" // replace with your production frontend domain
+];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
+// Enable preflight for all routes
+app.options("*", cors());
 
 // Universal request logger middleware
 app.use((req, res, next) => {
