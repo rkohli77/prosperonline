@@ -23,7 +23,7 @@ app.use(cors({
   credentials: true,
 }));
 
-// Enable preflight for all routes
+// Handle preflight OPTIONS requests
 app.options("*", cors());
 
 // Universal request logger middleware

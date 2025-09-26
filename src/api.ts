@@ -3,7 +3,7 @@ const DEV_BACKEND_URL = "http://localhost:5000"; // your backend dev URL
 export async function sendMessage(message: string, userId: string) {
   const url = window.location.hostname === "localhost" 
     ? `${DEV_BACKEND_URL}/chat` 
-    : `https://api.prosperonline.ca/chat`; // replace with your production backend URL
+    : "https://prosperonline.ca/api/chat"; // updated to production Cloudflare backend path
 
   try {
     const controller = new AbortController();
