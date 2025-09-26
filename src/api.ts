@@ -1,7 +1,9 @@
 const DEV_BACKEND_URL = "http://localhost:5000"; // your backend dev URL
 
 export async function sendMessage(message: string, userId: string) {
-  const url = window.location.hostname === "localhost" ? `${DEV_BACKEND_URL}/chat` : "/chat";
+  const url = window.location.hostname === "localhost" 
+    ? `${DEV_BACKEND_URL}/chat` 
+    : `https://api.prosperonline.ca/chat`; // replace with your production backend URL
 
   try {
     const controller = new AbortController();

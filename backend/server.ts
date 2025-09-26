@@ -8,7 +8,8 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://prosperonline.ca" // replace with your production frontend domain
+  "https://prosperonline.ca",
+  "https://www.prosperonline.ca"
 ];
 
 app.use(cors({
@@ -27,6 +28,7 @@ app.options("*", cors());
 
 // Universal request logger middleware
 app.use((req, res, next) => {
+  // Optional: In production, replace console.log with structured logging or Cloudflare Logs
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
@@ -104,6 +106,7 @@ async function getBotReply(message: string, userId: string): Promise<string> {
 }
 
 app.post("/chat", async (req: Request, res: Response) => {
+  // Optional: Add rate limiting, request validation, or authentication in production
   const { message, userId, sessionId } = req.body as { message?: string; userId?: string; sessionId?: string };
   const effectiveUserId = userId || sessionId;
 
@@ -120,6 +123,9 @@ app.post("/chat", async (req: Request, res: Response) => {
     res.status(500).json({ reply: "Internal server error" });
   }
 });
+
+// In production, frontend should call:
+// https://api.prosperonline.ca/chat or https://prosperonline.ca/api/chat
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 app.listen(PORT, "0.0.0.0", () => console.log(`Backend running on port ${PORT}`));
