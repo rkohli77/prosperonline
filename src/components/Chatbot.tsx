@@ -80,7 +80,11 @@ const Chatbot = () => {
       ];
 
 
-      const res = await fetch("http://localhost:5000/chat", {
+      const backendUrl = window.location.hostname === "localhost" 
+        ? "http://localhost:5000/chat" 
+        : "https://prosperonline.ca/api/chat"; // replace with actual production backend URL
+
+      const res = await fetch(backendUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: messageToSend, sessionId }),
