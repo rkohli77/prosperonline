@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",               // Modern JS features
+      "module": "commonjs",             // Required for Node.js runtime
+      "esModuleInterop": true,          // Allows default imports from CommonJS modules
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,                   // Enable all strict type-checking options
+      "skipLibCheck": true,             // Skip type checking of all declaration files
+      "outDir": "./dist",               // Where compiled JS will go
+      "rootDir": "./",                  // Root directory of your TS files
+      "resolveJsonModule": true,
+      "moduleResolution": "node"
+    },
+    "include": ["server.ts", "**/*.ts"],
+    "exclude": ["node_modules"]
+  }

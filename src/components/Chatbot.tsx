@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { trackChatbotError, trackUserMessage, trackApiCall, trackUserInteraction, trackConversation, trackSession } from "@/lib/error-tracking";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,22 +18,22 @@ const Chatbot = () => {
       ]);
 
       // Track session start
-      trackSession({
-        sessionId,
-        startedAt: new Date().toISOString(),
-        totalMessages: 0,
-        userAgent: navigator.userAgent,
-        status: 'active'
-      });
+      // trackSession({
+      //   sessionId,
+      //   startedAt: new Date().toISOString(),
+      //   totalMessages: 0,
+      //   userAgent: navigator.userAgent,
+      //   status: 'active'
+      // });
 
       // Track initial bot message
-      trackConversation({
-        sessionId,
-        botResponse: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?",
-        messageType: 'bot',
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent
-      });
+      // trackConversation({
+      //   sessionId,
+      //   botResponse: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?",
+      //   messageType: 'bot',
+      //   timestamp: new Date().toISOString(),
+      //   userAgent: navigator.userAgent
+      // });
     }
   }, [messages.length, sessionId]);
 
@@ -48,26 +47,21 @@ const Chatbot = () => {
     setLoading(true);
 
     // Track user message
-    trackUserMessage();
-    trackUserInteraction('message_sent', { messageLength: messageToSend.length });
+    // trackUserMessage();
+    // trackUserInteraction('message_sent', { messageLength: messageToSend.length });
 
     // Track user conversation
-    trackConversation({
-      sessionId,
-      userMessage: messageToSend,
-      messageType: 'user',
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent
-    });
+    // trackConversation({
+    //   sessionId,
+    //   userMessage: messageToSend,
+    //   messageType: 'user',
+    //   timestamp: new Date().toISOString(),
+    //   userAgent: navigator.userAgent
+    // });
 
     const startTime = Date.now();
 
     try {
-      // Check if API key is available
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey) {
-        throw new Error("OpenAI API key not configured");
-      }
 
       // Prepare conversation history for context
       const conversationHistory = messages.map(msg => ({
@@ -85,20 +79,15 @@ const Chatbot = () => {
         { role: "user", content: messageToSend }
       ];
 
-      // Call OpenAI API
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+
+      const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: allMessages,
-          max_tokens: 300,
-          temperature: 0.7,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: messageToSend, sessionId }),
       });
+      
+      // const data = await res.json();
+      // const reply = data.reply;
 
       const responseTime = Date.now() - startTime;
 
@@ -108,26 +97,26 @@ const Chatbot = () => {
       }
 
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content?.trim();
+      const reply = data.reply; //data.choices?.[0]?.message?.content?.trim();
 
       if (!reply) {
         throw new Error("No response from OpenAI");
       }
 
-      // Track successful API call
-      trackApiCall(true, responseTime);
-      trackUserInteraction('api_success', { responseTime, responseLength: reply.length });
+       // Track successful API call
+      // trackApiCall(true, responseTime);
+      // trackUserInteraction('api_success', { responseTime, responseLength: reply.length });
 
       // Track bot response
-      trackConversation({
-        sessionId,
-        botResponse: reply,
-        messageType: 'bot',
-        timestamp: new Date().toISOString(),
-        responseTime,
-        userAgent: navigator.userAgent
-      });
-
+      // trackConversation({
+      //   sessionId,
+      //   botResponse: reply,
+      //   messageType: 'bot',
+      //   timestamp: new Date().toISOString(),
+      //   responseTime,
+      //   userAgent: navigator.userAgent
+      // });
+ 
       setMessages([
         ...newMessages,
         { sender: "bot" as const, text: reply },
@@ -136,15 +125,15 @@ const Chatbot = () => {
       const responseTime = Date.now() - startTime;
       
       // Track failed API call
-      trackApiCall(false, responseTime);
+      // trackApiCall(false, responseTime);
       
       // Track the error for backend monitoring
       if (err instanceof Error) {
-        await trackChatbotError(err, 'chatbot_api_call', {
-          userInput: messageToSend,
-          responseTime,
-          conversationLength: messages.length,
-        });
+        // await trackChatbotError(err, 'chatbot_api_call', {
+        //   userInput: messageToSend,
+        //   responseTime,
+        //   conversationLength: messages.length,
+        // });
       }
       
       // Don't show technical error details to users
@@ -170,24 +159,24 @@ const Chatbot = () => {
       }
       
       // Track user interaction with error
-      trackUserInteraction('error_encountered', { 
-        errorType, 
-        userMessage, 
-        responseTime,
-        userInput: messageToSend 
-      });
+      // trackUserInteraction('error_encountered', { 
+      //   errorType, 
+      //   userMessage, 
+      //   responseTime,
+      //   userInput: messageToSend 
+      // });
 
       // Track error response
-      trackConversation({
-        sessionId,
-        botResponse: userMessage,
-        messageType: 'bot',
-        timestamp: new Date().toISOString(),
-        responseTime,
-        errorOccurred: true,
-        errorType,
-        userAgent: navigator.userAgent
-      });
+      // trackConversation({
+      //   sessionId,
+      //   botResponse: userMessage,
+      //   messageType: 'bot',
+      //   timestamp: new Date().toISOString(),
+      //   responseTime,
+      //   errorOccurred: true,
+      //   errorType,
+      //   userAgent: navigator.userAgent
+      // });
       
       setMessages([
         ...newMessages,
@@ -207,7 +196,7 @@ const Chatbot = () => {
       <button
         onClick={() => {
           setIsOpen(!isOpen);
-          trackUserInteraction(isOpen ? 'chat_closed' : 'chat_opened');
+          // trackUserInteraction(isOpen ? 'chat_closed' : 'chat_opened');
         }}
         className="w-14 h-14 rounded-full bg-accent text-white flex items-center justify-center shadow-lg hover:shadow-xl transition focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
         aria-label={isOpen ? "Close chat" : "Open chat"}
@@ -230,7 +219,7 @@ const Chatbot = () => {
             <button 
               onClick={() => {
                 setIsOpen(false);
-                trackUserInteraction('chat_closed');
+                // trackUserInteraction('chat_closed');
               }}
               className="hover:bg-white/20 rounded p-1 focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="Close chat"
