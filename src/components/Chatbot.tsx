@@ -16,24 +16,6 @@ const Chatbot = () => {
           text: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?"
         }
       ]);
-
-      // Track session start
-      // trackSession({
-      //   sessionId,
-      //   startedAt: new Date().toISOString(),
-      //   totalMessages: 0,
-      //   userAgent: navigator.userAgent,
-      //   status: 'active'
-      // });
-
-      // Track initial bot message
-      // trackConversation({
-      //   sessionId,
-      //   botResponse: "Hi! I'm here to help you learn about Prosper Online's digital marketing services. How can I assist you today?",
-      //   messageType: 'bot',
-      //   timestamp: new Date().toISOString(),
-      //   userAgent: navigator.userAgent
-      // });
     }
   }, [messages.length, sessionId]);
 
@@ -45,19 +27,6 @@ const Chatbot = () => {
     setMessages(newMessages);
     setInput("");
     setLoading(true);
-
-    // Track user message
-    // trackUserMessage();
-    // trackUserInteraction('message_sent', { messageLength: messageToSend.length });
-
-    // Track user conversation
-    // trackConversation({
-    //   sessionId,
-    //   userMessage: messageToSend,
-    //   messageType: 'user',
-    //   timestamp: new Date().toISOString(),
-    //   userAgent: navigator.userAgent
-    // });
 
     const startTime = Date.now();
 
@@ -106,20 +75,6 @@ const Chatbot = () => {
       if (!reply) {
         throw new Error("No response from OpenAI");
       }
-
-       // Track successful API call
-      // trackApiCall(true, responseTime);
-      // trackUserInteraction('api_success', { responseTime, responseLength: reply.length });
-
-      // Track bot response
-      // trackConversation({
-      //   sessionId,
-      //   botResponse: reply,
-      //   messageType: 'bot',
-      //   timestamp: new Date().toISOString(),
-      //   responseTime,
-      //   userAgent: navigator.userAgent
-      // });
  
       setMessages([
         ...newMessages,
@@ -161,27 +116,7 @@ const Chatbot = () => {
           errorType = 'no_response';
         }
       }
-      
-      // Track user interaction with error
-      // trackUserInteraction('error_encountered', { 
-      //   errorType, 
-      //   userMessage, 
-      //   responseTime,
-      //   userInput: messageToSend 
-      // });
-
-      // Track error response
-      // trackConversation({
-      //   sessionId,
-      //   botResponse: userMessage,
-      //   messageType: 'bot',
-      //   timestamp: new Date().toISOString(),
-      //   responseTime,
-      //   errorOccurred: true,
-      //   errorType,
-      //   userAgent: navigator.userAgent
-      // });
-      
+       
       setMessages([
         ...newMessages,
         { 

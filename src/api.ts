@@ -1,9 +1,7 @@
 const DEV_BACKEND_URL = "http://localhost:5000"; // your backend dev URL
 
 export async function sendMessage(message: string, userId: string) {
-  const url = window.location.hostname === "localhost" 
-    ? `${DEV_BACKEND_URL}/chat` 
-    : "https://prosperonline.ca/api/chat"; // updated to production Cloudflare backend path
+  const url = window.location.hostname === "localhost" ? `${DEV_BACKEND_URL}/chat` : "/chat";
 
   try {
     const controller = new AbortController();
@@ -12,7 +10,7 @@ export async function sendMessage(message: string, userId: string) {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, sessionId: userId }),
+      body: JSON.stringify({ userMessage: message, sessionId: userId }),
       signal: controller.signal,
     });
 
