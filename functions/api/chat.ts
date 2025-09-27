@@ -1,14 +1,18 @@
+// Cloudflare environment bindings
+declare const SUPABASE_URL: string;
+declare const SUPABASE_SERVICE_ROLE_KEY: string;
+declare const OPENAI_API_KEY: string;
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 
-// Initialize clients using Cloudflare environment variables
+// Initialize clients using Cloudflare environment bindings
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY
 );
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+  apiKey: OPENAI_API_KEY,
 });
 
 // Handle POST requests to /api/chat
