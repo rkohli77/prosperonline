@@ -1,64 +1,10 @@
-// Cloudflare environment bindings
-declare const SUPABASE_URL: string;
-declare const SUPABASE_SERVICE_ROLE_KEY: string;
-declare const OPENAI_API_KEY: string;
-import { createClient } from "@supabase/supabase-js";
-import OpenAI from "openai";
-
-// Initialize clients using Cloudflare environment bindings
-const supabase = createClient(
-  SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY
-);
-
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
-
-// Handle POST requests to /api/chat
+// Minimal echo version for Cloudflare deployment/CORS testing
 export async function onRequestPost({ request }: { request: Request }) {
   try {
     const body = await request.json();
-    const { message, sessionId } = body;
+    const { message } = body;
 
-    if (!message?.trim() || !sessionId?.trim()) {
-      return new Response(JSON.stringify({ reply: "Invalid request" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Generate embedding
-    const embeddingResponse = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: message,
-    });
-    const embedding = embeddingResponse.data[0].embedding;
-
-    // Query Supabase using your match function
-    const rpcResponse = await supabase.rpc("match_website_content", {
-      query_embedding: embedding,
-      match_threshold: 0.75,
-      match_count: 5,
-    });
-
-    const contextText = (rpcResponse.data as any[] | null)
-      ?.map((row) => row.content)
-      .join("\n\n") || "";
-
-    // Ask GPT
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        {
-          role: "user",
-          content: `Answer the following question using this context:\n${contextText}\n\nQuestion: ${message}`,
-        },
-      ],
-    });
-
-    const reply = completion.choices[0].message?.content || "Sorry, no answer available.";
+    const reply = `Echo: ${message || "no message provided"}`;
 
     return new Response(JSON.stringify({ reply }), {
       headers: {
@@ -69,7 +15,6 @@ export async function onRequestPost({ request }: { request: Request }) {
       },
     });
   } catch (err) {
-    console.error("Error in /api/chat:", err);
     return new Response(JSON.stringify({ reply: "Internal server error" }), {
       status: 500,
       headers: {
