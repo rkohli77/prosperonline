@@ -1,0 +1,10 @@
+name = "prosper-online-chat"
+compatibility_date = "2023-10-30"
+
+# Local development variables (for Pages)
+[vars]
+SUPABASE_URL = "https://kylbliwcnfnoidtltgum.supabase.co"
+
+# Note: Don't put secrets here! Use .env file or Cloudflare dashboard
+# SUPABASE_SERVICE_ROLE_KEY and OPENAI_API_KEY should be added here to test locally
+# and set as secrets in Cloudflare dashboard for production
