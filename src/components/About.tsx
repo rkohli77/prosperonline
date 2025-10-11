@@ -6,18 +6,18 @@ const About = () => {
   return (
     <div className="bg-background">
       {/* Hero Section */}
-      <section className="pt-52 pb-20 md:pt-60 md:pb-32 bg-gradient-to-r from-blue-300 via-white to-blue-500 to-purple-200 relative overflow-hidden">
+      <section className="pt-32 sm:pt-40 md:pt-52 lg:pt-60 pb-16 sm:pb-20 md:pb-32 bg-gradient-to-r from-blue-300 via-white to-blue-500 to-purple-200 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="container mx-auto px-6 relative">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 animate-fade-in-up">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 sm:mb-8 animate-fade-in-up">
             About{' '}
                <span className="bg-gradient-to-r from-blue-600 via-purple-900 to-pink-600 bg-clip-text text-transparent">
               ProsperOnline
             </span>
              </h1>
           
-            <p className="text-xl md:text-2xl text-muted-foreground mb-12 animate-fade-in-up max-w-4xl mx-auto leading-relaxed" style={{ animationDelay: '0.2s' }}>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 sm:mb-12 animate-fade-in-up max-w-4xl mx-auto leading-relaxed px-2" style={{ animationDelay: '0.2s' }}>
               We're a dynamic startup specializing in comprehensive digital solutions for businesses 
               looking to establish and grow their online presence in the Canadian market.
             </p>
@@ -25,21 +25,21 @@ const About = () => {
         </div>
       </section>
       {/* Story Section */}
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-6">
+      <section className="py-16 sm:py-20 md:py-28">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
               <div className="animate-fade-in-up">
                 <span className="inline-block px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium mb-6">
                   Our Journey
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold mb-8 text-foreground leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 text-foreground leading-tight">
                   Building Digital Success Stories
                 </h2>
-                <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+                <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-muted-foreground leading-relaxed">
                   <p>
                     Founded in 2025 with a vision to democratize digital marketing for Canadian businesses, 
-                    ProsperOnline is a small team of passionate marketers providing comprehensive 
+                    ProsperOnline is a small team of passionate developers providing comprehensive 
                     digital solutions to businesses.
                   </p>
                   <p>

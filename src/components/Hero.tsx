@@ -29,9 +29,9 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 animate-fade-in-up">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Digital Solutions
             </span>
@@ -39,15 +39,15 @@ const Hero = () => {
             <span className="text-foreground">That Drive Results</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 animate-fade-in-up max-w-3xl mx-auto" style={{ animationDelay: '0.2s' }}>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 animate-fade-in-up max-w-3xl mx-auto px-2" style={{ animationDelay: '0.2s' }}>
             We help businesses grow online with marketing, SEO, custom website, lead generation, and analytics solutions designed for the Canadian market.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-in-up px-4" style={{ animationDelay: '0.4s' }}>
             <Button
               onClick={scrollToContact}
               size="lg"
-              className="bg-gradient-accent hover:shadow-glow transition-smooth text-lg px-8 py-4 hover-lift"
+              className="w-full sm:w-auto bg-gradient-accent hover:shadow-glow transition-smooth text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 hover-lift"
             >
               Get Started Today
             </Button>
@@ -55,7 +55,7 @@ const Hero = () => {
               onClick={() => window.location.href = '/about'}
               variant="outline"
               size="lg"
-              className="text-lg px-8 py-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
+              className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
             >
               Learn More
             </Button>

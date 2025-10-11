@@ -61,38 +61,38 @@ const blogPosts = [
 
 const Blogs = () => {
   return (
-    <div className="py-24 bg-background">
-      <div className="container mx-auto px-6">
+    <div className="pt-32 sm:pt-24 bg-background pb-24">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Header Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">
+        <div className="text-center mb-12 sm:mb-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 animate-fade-in-up">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Digital Marketing
             </span>
             <br />
             <span className="text-foreground">Insights & Tips</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in-up px-2" style={{ animationDelay: '0.2s' }}>
             Stay ahead of the curve with expert insights, industry trends, and actionable strategies 
             to grow your business online in the Canadian market.
           </p>
         </div>
 
         {/* Featured Post */}
-        <div className="mb-16">
+        <div className="mb-12 sm:mb-16">
           <Card className="bg-gradient-card border-0 shadow-custom-lg hover:shadow-custom-xl transition-smooth hover-lift">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-              <div className="p-8 lg:p-12">
+              <div className="p-6 sm:p-8 lg:p-12">
                 <div className="flex items-center space-x-2 mb-4">
                   <span className="text-4xl">{blogPosts[0].image}</span>
                   <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
                     {blogPosts[0].category}
                   </span>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
                   {blogPosts[0].title}
                 </h2>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
+                <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                   {blogPosts[0].excerpt}
                 </p>
                 <div className="flex items-center justify-between">
@@ -106,8 +106,8 @@ const Blogs = () => {
                   </Button> */}
                 </div>
               </div>
-              <div className="bg-gradient-primary/10 p-8 lg:p-12 flex items-center justify-center">
-                <div className="text-8xl opacity-20">
+              <div className="bg-gradient-primary/10 p-6 sm:p-8 lg:p-12 flex items-center justify-center">
+                <div className="text-6xl sm:text-8xl opacity-20">
                   {blogPosts[0].image}
                 </div>
               </div>
@@ -116,26 +116,26 @@ const Blogs = () => {
         </div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {blogPosts.slice(1).map((post, index) => (
             <Card
               key={post.id}
               className="group hover-lift bg-gradient-card border-0 shadow-custom-md hover:shadow-custom-lg transition-smooth animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-3xl">{post.image}</span>
+              <CardHeader className="pb-3 sm:pb-4">
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <span className="text-2xl sm:text-3xl">{post.image}</span>
                   <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full">
                     {post.category}
                   </span>
                 </div>
-                <CardTitle className="text-lg font-bold text-foreground group-hover:text-accent transition-smooth line-clamp-2">
+                <CardTitle className="text-base sm:text-lg font-bold text-foreground group-hover:text-accent transition-smooth line-clamp-2">
                   {post.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-muted-foreground leading-relaxed mb-4 line-clamp-3">
+              <CardContent className="px-4 sm:px-6">
+                <CardDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-3 sm:mb-4 line-clamp-3">
                   {post.excerpt}
                 </CardDescription>
                 <div className="flex items-center justify-between">
@@ -154,21 +154,21 @@ const Blogs = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-16">
+        <div className="mt-12 sm:mt-16">
           <Card className="bg-gradient-primary text-primary-foreground border-0 shadow-custom-lg">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Stay Updated</h3>
-              <p className="text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
+            <CardContent className="p-6 sm:p-8 text-center">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Stay Updated</h3>
+              <p className="text-sm sm:text-base text-primary-foreground/90 mb-4 sm:mb-6 max-w-2xl mx-auto px-2">
                 Get the latest digital marketing insights, tips, and industry updates delivered 
-                directly to your inbox. Join hundreds of Canadian businesses growing online.
+                directly to your inbox. Join countless Canadian businesses growing online.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="flex-1 px-4 py-3 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm sm:text-base"
                 />
-                <Button className="bg-gradient-accent hover:shadow-glow transition-smooth">
+                <Button className="bg-gradient-accent hover:shadow-glow transition-smooth text-sm sm:text-base">
                   Subscribe
                 </Button>
               </div>

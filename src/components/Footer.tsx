@@ -4,19 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { getFacebookUrl, getInstagramUrl, handleSocialClick } from '@/lib/social-links';
 const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground py-12">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-primary text-primary-foreground py-8 sm:py-12">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-            <img src={logo} alt="ProsperOnline.ca Logo" className="w-60 h-65 object-contain brightness-0 invert" />
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2">
+            <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+            <img src={logo} alt="ProsperOnline.ca Logo" className="w-40 sm:w-48 lg:w-60 h-auto object-contain brightness-0 invert" />
             </div>
-            <p className="text-primary-foreground/80 mb-4 max-w-md">
-              Helping Canadian businesses grow online with comprehensive digital marketing solutions, 
-              SEO optimization, and analytics-driven strategies.
+            <p className="text-sm sm:text-base text-primary-foreground/80 mb-4 max-w-md">
+              Helping Canadian businesses grow online with comprehensive digital marketing solutions, elegant website design,
+              and analytics-driven strategies.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               <a 
                 href="#" 
                 className="text-primary-foreground/60 hover:text-accent transition-smooth flex items-center justify-center w-8 h-8 rounded-full hover:bg-primary-foreground/10"
@@ -73,11 +73,11 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Services</h3>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Services</h3>
+            <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-primary-foreground/80">
+            <li><a href="#services" className="hover:text-accent transition-smooth"></a>Website Design</li>
               <li><a href="#services" className="hover:text-accent transition-smooth">Digital Marketing</a></li>
               <li><a href="#services" className="hover:text-accent transition-smooth">SEO Optimization</a></li>
-              <li><a href="#services" className="hover:text-accent transition-smooth">Lead Generation</a></li>
               <li><a href="#services" className="hover:text-accent transition-smooth">Analytics</a></li>
               <li><a href="#services" className="hover:text-accent transition-smooth">Social Media</a></li>
             </ul>
@@ -85,8 +85,8 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contact</h3>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Contact</h3>
+            <ul className="space-y-1 sm:space-y-2 text-sm sm:text-base text-primary-foreground/80">
               <li>📧 info@prosperonline.ca</li>
               <li>🇨🇦 Serving Canada</li>
               <li>⚡ 24h Response Time</li>
@@ -94,9 +94,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center">
-          <p className="text-primary-foreground/60">
-            &copy; 2025 ProsperOnline.ca. All rights reserved. Built with 💙 for Canadian businesses.
+        <div className="border-t border-primary-foreground/20 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
+          <p className="text-xs sm:text-sm text-primary-foreground/60">
+            &copy; 2025 ProsperOnline.ca. All rights reserved. Built with love for Canadian businesses.
           </p>
         </div>
       </div>
