@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, CSSProperties } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import logo from '@/assets/logo.webp';
@@ -9,6 +9,63 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [sampledBgStyle, setSampledBgStyle] = useState<CSSProperties | null>(null);
+
+  useEffect(() => {
+    // Samples the background color (or nearest non-transparent ancestor) at a point
+    // just below the header so the mobile navbar can blend with the page/hero.
+    const sampleBackground = () => {
+      if (!isMobile || isScrolled) {
+        setSampledBgStyle(null);
+        return;
+      }
+
+      try {
+        const headerEl = document.querySelector('header');
+        const rect = headerEl?.getBoundingClientRect();
+        const x = window.innerWidth / 2;
+        // sample 1px below the header bottom so we get the element behind it
+        const y = (rect ? rect.bottom : 64) + 1;
+        const el = document.elementFromPoint(x, y) as HTMLElement | null;
+
+        let node: HTMLElement | null = el;
+        let foundColor: string | null = null;
+        while (node && node !== document.documentElement) {
+          const style = getComputedStyle(node);
+          const bg = style.backgroundColor || style.background;
+          if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+            foundColor = bg;
+            break;
+          }
+          node = node.parentElement;
+        }
+
+        if (!foundColor) {
+          const bodyStyle = getComputedStyle(document.body);
+          foundColor = bodyStyle.backgroundColor || bodyStyle.background || 'white';
+        }
+
+        // Apply sampled background and keep a subtle blur for blending
+        setSampledBgStyle({ background: foundColor, backdropFilter: 'saturate(120%) blur(6px)', WebkitBackdropFilter: 'saturate(120%) blur(6px)' });
+      } catch (e) {
+        setSampledBgStyle(null);
+      }
+    };
+
+    // initial sample and on events that may change the element behind header
+    sampleBackground();
+    window.addEventListener('resize', sampleBackground);
+    window.addEventListener('orientationchange', sampleBackground);
+    window.addEventListener('popstate', sampleBackground);
+    window.addEventListener('hashchange', sampleBackground);
+
+    return () => {
+      window.removeEventListener('resize', sampleBackground);
+      window.removeEventListener('orientationchange', sampleBackground);
+      window.removeEventListener('popstate', sampleBackground);
+      window.removeEventListener('hashchange', sampleBackground);
+    };
+  }, [isMobile, isScrolled]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,8 +137,11 @@ const Header = () => {
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-background/95 backdrop-blur-md shadow-custom-md'
+            : isMobile
+            ? 'backdrop-blur-md shadow-custom-md'
             : 'bg-transparent'
         }`}
+        style={!isScrolled && isMobile && sampledBgStyle ? sampledBgStyle : undefined}
       >
         <nav className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -130,8 +190,10 @@ const Header = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="mobile-menu-button text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-300"
+              className="mobile-menu-button text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-300 p-2.5 rounded-lg"
               aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6 transition-transform duration-300" />
@@ -145,31 +207,34 @@ const Header = () => {
     </header>
 
     {/* Embedded Mobile Menu */}
-    <div className={`mobile-menu md:hidden fixed top-0 left-0 w-full bg-gradient-to-b from-background/98 via-background/95 to-background/98 backdrop-blur-sm shadow-xl z-40 transition-all duration-300 ease-in-out ${
+    <div id="mobile-menu" role="menu" aria-label="Mobile navigation" aria-hidden={!isMobileMenuOpen} className={`mobile-menu md:hidden fixed top-0 left-0 w-full backdrop-blur-sm shadow-xl z-40 transition-all duration-300 ease-in-out ${
       isMobileMenuOpen 
-        ? 'translate-y-0 opacity-100' 
+        ? 'translate-y-0 opacity-100 pointer-events-auto' 
         : '-translate-y-full opacity-0 pointer-events-none'
-    }`} style={{ top: '80px' }}>
+    }`} style={Object.assign({ top: '80px' } as any, (!isScrolled && isMobile && sampledBgStyle) ? sampledBgStyle : { background: 'rgba(255,255,255,0.95)' })}>
       <div className="container mx-auto px-4 py-6">
         {/* Navigation Links */}
-        <nav className="space-y-2 mb-6">
+        <nav className="space-y-2 mb-6" role="menu">
           <button
             onClick={() => handleMobileNavigation('/')}
-            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group"
+            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            role="menuitem"
           >
             <span className="font-medium text-lg">Home</span>
             <ChevronDown className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rotate-[-90deg]" />
           </button>
           <button
             onClick={() => handleMobileNavigation('/about')}
-            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group"
+            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            role="menuitem"
           >
             <span className="font-medium text-lg">About</span>
             <ChevronDown className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rotate-[-90deg]" />
           </button>
           <button
             onClick={() => handleMobileNavigation('/blogs')}
-            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group"
+            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            role="menuitem"
           >
             <span className="font-medium text-lg">Blog</span>
             <ChevronDown className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rotate-[-90deg]" />
