@@ -59,7 +59,7 @@ const About = () => {
                 <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 rounded-3xl p-8 md:p-12 relative overflow-hidden">
                   <div className="absolute top-4 right-4 w-32 h-32 bg-gradient-primary opacity-10 rounded-full blur-xl"></div>
                   <div className="relative">
-                    <div className="text-6xl mb-6 text-center">🚀</div>
+                    <div className="text-6xl mb-6 text-center">🧭</div>
                     <h3 className="text-2xl md:text-3xl font-bold mb-6 text-foreground text-center">Our Mission</h3>
                     <p className="text-muted-foreground leading-relaxed text-center text-lg">
                       To empower our clients with cutting-edge digital marketing solutions 
@@ -173,7 +173,7 @@ const About = () => {
               </div>
               
               <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-card via-card to-muted/20 border border-border hover:border-accent/30 transition-smooth animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                <div className="text-5xl mb-6 group-hover:animate-float">📊</div>
+                <div className="text-5xl mb-6 group-hover:animate-float">🎯</div>
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Data-Driven Results</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Every strategy backed by comprehensive analytics, A/B testing, and measurable ROI to ensure your investment pays off.
@@ -197,7 +197,7 @@ const About = () => {
               </div>
 
               <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-card via-card to-muted/20 border border-border hover:border-accent/30 transition-smooth animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-                <div className="text-5xl mb-6 group-hover:animate-float">🎯</div>
+                <div className="text-5xl mb-6 group-hover:animate-float">🏆</div>
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Proven Track Record</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   95% client satisfaction rate with documented case studies showing consistent growth and ROI improvements.

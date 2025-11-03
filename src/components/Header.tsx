@@ -260,7 +260,9 @@ const Header = () => {
               </div>
               <div>
                 <p className="font-medium text-foreground">Email</p>
-                <p className="text-xs">info@prosperonline.ca</p>
+                <a href="mailto:info@prosperonline.ca" className="text-xs text-accent hover:underline">
+                  info@prosperonline.ca
+                </a>
               </div>
             </div>
             <div className="flex items-center space-x-3 text-muted-foreground">

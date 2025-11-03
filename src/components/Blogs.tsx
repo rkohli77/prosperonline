@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -60,6 +61,12 @@ const blogPosts = [
 ];
 
 const Blogs = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  
+  const filteredPosts = selectedCategory === 'All' 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory);
+  
   return (
     <div className="pt-32 sm:pt-24 bg-background pb-24">
       <div className="container mx-auto px-4 sm:px-6">
@@ -76,48 +83,68 @@ const Blogs = () => {
             Stay ahead of the curve with expert insights, industry trends, and actionable strategies 
             to grow your business online in the Canadian market.
           </p>
+          
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-2 mt-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            {['All', 'Digital Marketing', 'SEO', 'Lead Generation', 'Social Media', 'Analytics', 'CRM'].map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                size="sm"
+                className={selectedCategory === category 
+                  ? "bg-accent text-accent-foreground" 
+                  : "hover:bg-accent hover:text-accent-foreground transition-smooth"
+                }
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Featured Post */}
-        <div className="mb-12 sm:mb-16">
-          <Card className="bg-gradient-card border-0 shadow-custom-lg hover:shadow-custom-xl transition-smooth hover-lift">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-              <div className="p-6 sm:p-8 lg:p-12">
-                <div className="flex items-center space-x-2 mb-4">
-                  <span className="text-4xl">{blogPosts[0].image}</span>
-                  <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
-                    {blogPosts[0].category}
-                  </span>
-                </div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
-                  {blogPosts[0].title}
-                </h2>
-                <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
-                  {blogPosts[0].excerpt}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-muted-foreground">
-                    <span>{blogPosts[0].date}</span>
-                    <span className="mx-2">•</span>
-                    <span>{blogPosts[0].readTime}</span>
+        {filteredPosts.length > 0 && (
+          <div className="mb-12 sm:mb-16">
+            <Card className="bg-gradient-card border-0 shadow-custom-lg hover:shadow-custom-xl transition-smooth hover-lift">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                <div className="p-6 sm:p-8 lg:p-12">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <span className="text-4xl">{filteredPosts[0].image}</span>
+                    <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-1 rounded-full">
+                      {filteredPosts[0].category}
+                    </span>
                   </div>
-                  {/* <Button className="bg-gradient-accent hover:shadow-glow transition-smooth">
-                    Read More
-                  </Button> */}
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
+                    {filteredPosts[0].title}
+                  </h2>
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
+                    {filteredPosts[0].excerpt}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-muted-foreground">
+                      <span>{filteredPosts[0].date}</span>
+                      <span className="mx-2">•</span>
+                      <span>{filteredPosts[0].readTime}</span>
+                    </div>
+                    <Button className="bg-gradient-accent hover:shadow-glow transition-smooth">
+                      Read More
+                    </Button>
+                  </div>
+                </div>
+                <div className="bg-gradient-primary/10 p-6 sm:p-8 lg:p-12 flex items-center justify-center">
+                  <div className="text-6xl sm:text-8xl opacity-20">
+                    {filteredPosts[0].image}
+                  </div>
                 </div>
               </div>
-              <div className="bg-gradient-primary/10 p-6 sm:p-8 lg:p-12 flex items-center justify-center">
-                <div className="text-6xl sm:text-8xl opacity-20">
-                  {blogPosts[0].image}
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
+            </Card>
+          </div>
+        )}
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {blogPosts.slice(1).map((post, index) => (
+          {filteredPosts.slice(1).map((post, index) => (
             <Card
               key={post.id}
               className="group hover-lift bg-gradient-card border-0 shadow-custom-md hover:shadow-custom-lg transition-smooth animate-scale-in"
@@ -144,13 +171,28 @@ const Blogs = () => {
                     <span className="mx-1">•</span>
                     <span>{post.readTime}</span>
                   </div>
-                  {/* <Button variant="outline" size="sm" className="text-xs">
+                  <Button variant="outline" size="sm" className="text-xs hover:bg-accent hover:text-accent-foreground transition-smooth">
                     Read More
-                  </Button> */}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Popular Tags */}
+        <div className="mb-12 sm:mb-16">
+          <h3 className="text-xl sm:text-2xl font-bold text-center mb-6">Popular Topics</h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            {['Local SEO', 'Content Marketing', 'PPC Advertising', 'Email Marketing', 'Conversion Rate', 'Google Analytics', 'Social Media Ads', 'Lead Magnets'].map((tag) => (
+              <span
+                key={tag}
+                className="px-4 py-2 bg-muted/50 hover:bg-accent/10 text-muted-foreground hover:text-accent rounded-full text-sm cursor-pointer transition-smooth"
+              >
+                #{tag.replace(' ', '')}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Newsletter Signup */}
@@ -172,6 +214,7 @@ const Blogs = () => {
                   Subscribe
                 </Button>
               </div>
+              <p className="text-xs text-primary-foreground/70 mt-3">Join 500+ Canadian businesses already subscribed</p>
             </CardContent>
           </Card>
         </div>
