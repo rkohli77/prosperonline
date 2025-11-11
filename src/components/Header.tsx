@@ -176,6 +176,12 @@ const Header = () => {
             >
               Blog
             </button>
+            <button
+              onClick={() => window.location.href = '/chatbot'}
+              className="text-foreground hover:text-accent transition-smooth"
+            >
+              AI Chatbot
+            </button>
             <Button
               onClick={handleGetStarted}
               className="bg-gradient-accent hover:shadow-glow transition-smooth"
@@ -237,6 +243,14 @@ const Header = () => {
             role="menuitem"
           >
             <span className="font-medium text-lg">Blog</span>
+            <ChevronDown className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rotate-[-90deg]" />
+          </button>
+          <button
+            onClick={() => handleMobileNavigation('/chatbot')}
+            className="w-full text-left px-4 py-3 rounded-xl text-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200 flex items-center justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            role="menuitem"
+          >
+            <span className="font-medium text-lg">AI Chatbot</span>
             <ChevronDown className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rotate-[-90deg]" />
           </button>
         </nav>
