@@ -4,11 +4,13 @@ import ChatbotComponent from '@/components/Chatbot';
 
 const ChatbotPage = () => {
   return (
-    <>
+    <div className="min-h-screen">
       <Header />
-      <ChatbotComponent />
+      <main>
+        <ChatbotComponent />
+      </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import logo from '@/assets/logo.webp';
-import Chatbot from "@/components/Chatbot";
 import React, { useState, useEffect, useRef } from "react";
 import { getFacebookUrl, getInstagramUrl, handleSocialClick } from '@/lib/social-links';
 const Footer = () => {
@@ -100,7 +99,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-            <Chatbot />
     </footer>
   );
 };
